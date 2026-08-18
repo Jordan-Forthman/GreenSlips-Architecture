@@ -1,3 +1,14 @@
+# Local development infrastructure for the GreenSlips API.
+#
+# This is a sanitized copy of the compose file used by the private application
+# repository. It stands up the four backing services the API expects when running
+# locally; every credential and connection value is <REDACTED>.
+#
+# Production does not use this file. The deployed stack runs on Azure Container
+# Apps with Azure Database for PostgreSQL Flexible Server, Azure Managed Redis,
+# and Azure Blob Storage, provisioned from Bicep templates that are not published
+# here. Secrets come from Azure Key Vault via Managed Identity.
+
 version: '3.8'
 
 services:
@@ -5,9 +16,9 @@ services:
     image: postgres:16.4-alpine
     container_name: greenslips-postgres-dev
     environment:
-      POSTGRES_USER: greenslips
+      POSTGRES_USER: <REDACTED>
       POSTGRES_PASSWORD: <REDACTED>
-      POSTGRES_DB: greenslips
+      POSTGRES_DB: <REDACTED>
     ports:
       - "5432:5432"
     volumes:
@@ -21,6 +32,7 @@ services:
       - "6379:6379"
     restart: unless-stopped
 
+  # Stubs the upstream vendor APIs so local runs never spend real vendor quota.
   wiremock:
     image: wiremock/wiremock:latest
     container_name: greenslips-wiremock-dev
@@ -30,5 +42,19 @@ services:
       - ./src/Api/MockData:/home/wiremock
     restart: unless-stopped
 
+  # Azure Storage emulator. Lets the user data-export job write bundles and mint
+  # SAS URLs locally without touching a real storage account. Blob port only;
+  # queue and table are unused.
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    container_name: greenslips-azurite-dev
+    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 10000 --skipApiVersionCheck --location /data"
+    ports:
+      - "10000:10000"
+    volumes:
+      - azuritedata:/data
+    restart: unless-stopped
+
 volumes:
   pgdata:
+  azuritedata:

@@ -2,7 +2,8 @@
   "openapi": "3.0.4",
   "info": {
     "title": "BetAnalysisTool.Api",
-    "version": "v1"
+    "version": "v1",
+    "description": "Public API surface of the GreenSlips MLB analytics platform.\n\nThis document is published for architectural illustration only. It describes the shape of the API \u2014 paths, verbs, parameters and response contracts \u2014 and contains no implementation detail, credentials, or host information. The service is not publicly reachable and no server URL is listed.\n\nEndpoints tagged as a dormant NBA-era surface remain routed for compatibility but resolve to placeholder services while the NBA vertical is detached.\n\nPaths, verbs and parameters mirror the controller routing exactly. Response schemas are documented from the corresponding response records; operations without a schema return an untyped result and are documented as a bare 200."
   },
   "paths": {
     "/api/admin/backfill-master/{season}": {
@@ -10,6 +11,8 @@
         "tags": [
           "Admin"
         ],
+        "summary": "Enqueue the master historical backfill for a season.",
+        "description": "Requires the Admin authorization policy.",
         "parameters": [
           {
             "name": "season",
@@ -28,11 +31,2196 @@
         }
       }
     },
+    "/api/admin/mlb/backfill-splits/{season}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Enqueue the BallDontLie player-splits backfill for a season.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-pitcher-hand-splits/{season}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Enqueue the pitcher vs-handedness split backfill.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-batter-hand-splits/{season}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Enqueue the batter vs-handedness split backfill.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-hit-rates": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Recompute prop hit-rate cells for a slate date.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Slate date to recompute."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-crosswalk": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Backfill vendor player ids into the identity crosswalk.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/ingest-chadwick": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Ingest the open Chadwick player register.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/resolve-mlbam": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Resolve vendor player ids to MLBAM ids via the register.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/hydrate-player-identities": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Hydrate id-only players sitting in the identity review queue.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/resolve-mlbam-dob-tiebreak": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Break ambiguous identity matches using date of birth.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-statcast-discipline": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Backfill historical plate-discipline day tallies.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/resolve-statcast-fingerprints": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Re-stamp appearance-fingerprint ids on discipline rows.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/repair-game-dates": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "One-shot repair pass for off-by-one game dates.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/ingest-savant-season/{season}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Ingest the sabermetric CSV feeds for a season.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-game-outcomes": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Backfill settled game-outcome labels.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/run-results-sweep": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Run the results sweep on demand.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-box-scores": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Backfill per-player box-score labels used for grading.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/rebuild-hook-model": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Refit the starter-hook hazard model snapshots.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/hook-model-diagnostics": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Diagnostics for the most recent hook-model fit.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/hook-tenure-probe": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Tenure-leak probe over the hook model.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/rebuild-rolling-windows": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Rebuild player rolling as-of windows.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "full",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Full rebuild instead of the daily incremental pass."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-starter-pitchers": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Backfill starting-pitcher ids from the plate-appearance store.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "overwrite",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Overwrite existing starter assignments."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/build-pa-training-set": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Build the plate-appearance classifier training set.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/train-pa-model": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Run walk-forward fits for the plate-appearance classifier.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/pa-model-diagnostics": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Diagnostics for the plate-appearance classifier snapshots.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/ingest-pbp/{date}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Ingest event-level play-by-play for a date.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-schedule/{date}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Backfill the schedule for a date.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/edges/compute/{date}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Recompute edge signals for a slate date.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-schedule/season/{year}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Backfill the full schedule for a season.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-lineups/{season}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Reconstruct historical lineups for a season.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-bvp/{season}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Backfill batter-vs-pitcher matchup cells for a season.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill-catchers/{season}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Backfill catcher assignments for a season.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/trigger-rebuild": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Trigger the derived-feature rebuild chain.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/diagnose-projection/{gameId}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Explain the engine projection for a single game.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/unresolved-props": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "List prop names that could not be mapped to a known player.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "sport",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Sport"
+            }
+          },
+          {
+            "name": "includeMapped",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/unresolved-props/{id}/resolve": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Manually resolve an unmapped prop name to a player.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveUnresolvedPropRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/unresolved-props/{id}": {
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Discard an unresolved prop-name entry.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill/orchestrate": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Run the unified historical backfill orchestrator.",
+        "description": "Requires the Admin authorization policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BackfillOrchestrateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill/catch-up": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Run the coverage catch-up sweep on demand.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backtest/run": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Start a walk-forward backtest run.",
+        "description": "Requires the Admin authorization policy.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BacktestRunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backtest/calibrate/{runId}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Fit calibration curves from a completed backtest run.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "runId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backtest/report/{runId}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Aggregated report for a backtest run.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "runId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/calibration/fit/{runId}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Fit prop calibration maps from a backtest run.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "runId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "marketPrefix",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Restrict the fit to markets with this prefix."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/calibration": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "List fitted prop calibration maps.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "includeInactive",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backtest/runs": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "List recent backtest runs.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backtest/disagreement/{runId}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Where the model most disagreed with the market in a run.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "runId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backtest/timing-sweep/{runId}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Sweep of result sensitivity to bet-placement timing.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "runId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/admin/mlb/backfill/audit/{season}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Coverage audit for a backfilled season.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/inference/run-daily": {
+      "post": {
+        "tags": [
+          "Inference"
+        ],
+        "summary": "Project today's slate through the engine and persist the scored board.",
+        "description": "Requires the Admin authorization policy.",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunDailyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/inference/daily/{runId}": {
+      "get": {
+        "tags": [
+          "Inference"
+        ],
+        "summary": "Fetch a daily inference run.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "runId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/inference/daily/latest": {
+      "get": {
+        "tags": [
+          "Inference"
+        ],
+        "summary": "Fetch the most recent daily inference run.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/inference/daily/latest/export": {
+      "get": {
+        "tags": [
+          "Inference"
+        ],
+        "summary": "Export the most recent run as a workbook.",
+        "description": "Requires the Admin authorization policy.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/inference/daily/{runId}/grade": {
+      "post": {
+        "tags": [
+          "Inference"
+        ],
+        "summary": "Grade a run's predictions against settled labels.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "runId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/inference/daily/{runId}/export": {
+      "get": {
+        "tags": [
+          "Inference"
+        ],
+        "summary": "Export a run as a workbook.",
+        "description": "Requires the Admin authorization policy.",
+        "parameters": [
+          {
+            "name": "runId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/games/directory": {
+      "get": {
+        "tags": [
+          "MlbGames"
+        ],
+        "summary": "Game-directory blocks for a slate, with market cells and model grades.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarketScope"
+            }
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deltaMin",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "description": "Minimum line-movement delta filter."
+          },
+          {
+            "name": "slateWindow",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SlateWindow"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MlbGameDirectoryBlock"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mlb/games/{gameId}/detail": {
+      "get": {
+        "tags": [
+          "MlbGames"
+        ],
+        "summary": "Two-tier game detail: sticky HUD plus the historical ledger.",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarketScope"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MlbGameDetailResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mlb/games/{gameId}/diagnostic": {
+      "get": {
+        "tags": [
+          "MlbGames"
+        ],
+        "summary": "Per-game engine diagnostic payload.",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/players/directory": {
+      "get": {
+        "tags": [
+          "MlbPlayers"
+        ],
+        "summary": "Server-composed player-directory rows for a slate. Every ribbon filter folds into this single query.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gameId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "propType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Committed search tokens; OR union over player name."
+          },
+          {
+            "name": "prop",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Prop-type multi-select; OR union."
+          },
+          {
+            "name": "hitRateWindow",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Hit-rate window the min/max band applies to."
+          },
+          {
+            "name": "minHitRate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "maxHitRate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "minOdds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "maxOdds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "grade",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Edge-grade filter (A..D)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MlbPlayerDirectoryRow"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mlb/players/names": {
+      "get": {
+        "tags": [
+          "MlbPlayers"
+        ],
+        "summary": "Distinct player names on a slate, for the search control.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/players/prop-types": {
+      "get": {
+        "tags": [
+          "MlbPlayers"
+        ],
+        "summary": "Distinct prop types available on a slate.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/players/{id}/alt-lines": {
+      "get": {
+        "tags": [
+          "MlbPlayers"
+        ],
+        "summary": "Alternate-line ladder for a player's market.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "gameId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarketScope"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MlbAltLineRow"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mlb/players/{id}/detail": {
+      "get": {
+        "tags": [
+          "MlbPlayers"
+        ],
+        "summary": "Player detail for a game, optionally scoped to one prop and line.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "gameId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "prop",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "point",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarketScope"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/players/{id}/splits-arsenal": {
+      "get": {
+        "tags": [
+          "MlbPlayers"
+        ],
+        "summary": "Situational splits and pitcher-arsenal panel for a player.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "gameId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "window",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MlbSplitsArsenalWindow"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/home/plusev": {
+      "get": {
+        "tags": [
+          "MlbHome"
+        ],
+        "summary": "Top positive-expected-value plays for the landing screen.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/home/duos": {
+      "get": {
+        "tags": [
+          "MlbHome"
+        ],
+        "summary": "Correlated player pairings for the landing screen.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/trends": {
+      "get": {
+        "tags": [
+          "MlbTrend"
+        ],
+        "summary": "Enriched trend-signal cards for a slate.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subcategory",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tranche",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "slateWindow",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "minOdds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "maxOdds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "drivers",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated driver-tag filter."
+          },
+          {
+            "name": "minConverging",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Minimum number of converging situational splits."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrendSignalCardDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mlb/teams/{id}/detail": {
+      "get": {
+        "tags": [
+          "MlbTeamDetail"
+        ],
+        "summary": "Team detail with split ranks over a lookback window.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "window",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/terminal/hud": {
+      "get": {
+        "tags": [
+          "Terminal"
+        ],
+        "summary": "Slate state, edge counts and engine health for the terminal HUD.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/terminal/slate": {
+      "get": {
+        "tags": [
+          "Terminal"
+        ],
+        "summary": "Slate ticker cards.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/terminal/heatmap": {
+      "get": {
+        "tags": [
+          "Terminal"
+        ],
+        "summary": "Edge-density heatmap tiles for a slate.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/terminal/matrix": {
+      "get": {
+        "tags": [
+          "Terminal"
+        ],
+        "summary": "Drill-down rows for one heatmap bucket.",
+        "parameters": [
+          {
+            "name": "bucket",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            },
+            "description": "Heatmap bucket key to expand."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/terminal/leaderboard": {
+      "get": {
+        "tags": [
+          "Terminal"
+        ],
+        "summary": "Paged edge leaderboard.",
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 25
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/parlay/evaluate": {
+      "post": {
+        "tags": [
+          "MlbParlay"
+        ],
+        "summary": "Price a parlay slip with correlation-aware true-fair odds and EV.",
+        "description": "Requires an authenticated user. Rate limited per user.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParlayEvaluateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/parlay/suggestions": {
+      "get": {
+        "tags": [
+          "MlbParlay"
+        ],
+        "summary": "Suggested correlated legs to pair with a given prop.",
+        "description": "Requires an authenticated user.",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "propRowId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/mlb/engine/flush": {
+      "post": {
+        "tags": [
+          "Engine"
+        ],
+        "summary": "Flush the MLB read-through caches.",
+        "description": "Requires an authenticated user. Rate limited per user.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/parlay-pit": {
+      "get": {
+        "tags": [
+          "ParlayPit"
+        ],
+        "summary": "Parlay-pit board for a slate date.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/me/profile": {
+      "get": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Current user's display profile and entitlement tier.",
+        "description": "Requires an authenticated user.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/me/preferences": {
+      "get": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Current user's stored preferences.",
+        "description": "Requires an authenticated user.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPreferencesDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Replace the current user's preferences.",
+        "description": "Requires an authenticated user.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPreferencesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/me/delete": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Request erasure of the current user's account.",
+        "description": "Requires an authenticated user.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/me/export": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Request a data-export bundle for the current user.",
+        "description": "Requires an authenticated user. Rate limited to one request per user per day.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDataExportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/payments/apple/verify": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Verify an Apple in-app purchase receipt.",
+        "description": "Requires an authenticated user.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/payments/google/verify": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Verify a Google Play purchase receipt.",
+        "description": "Requires an authenticated user.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/payments/stripe/portal-session": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Create a Stripe billing-portal session for the current user.",
+        "description": "Requires an authenticated user.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortalSessionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/webhooks/stripe": {
+      "post": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "Stripe subscription lifecycle callback.",
+        "description": "Signature-verified vendor callback. Deliveries are de-duplicated through the WebhookDeliveries idempotency table.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/webhooks/balldontlie": {
+      "post": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "BallDontLie event callback; invalidates caches and broadcasts to the sport group.",
+        "description": "Signature-verified vendor callback. Deliveries are de-duplicated through the WebhookDeliveries idempotency table.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/webhooks/draftkings": {
+      "post": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "DraftKings event callback.",
+        "description": "Signature-verified vendor callback. Deliveries are de-duplicated through the WebhookDeliveries idempotency table.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Games/today": {
       "get": {
         "tags": [
           "Games"
         ],
+        "summary": "Today's games.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "responses": {
           "200": {
             "description": "OK"
@@ -45,6 +2233,8 @@
         "tags": [
           "Games"
         ],
+        "summary": "Odds for a team by abbreviation.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "abbr",
@@ -62,27 +2252,18 @@
         }
       }
     },
-    "/api/Injury": {
-      "get": {
-        "tags": [
-          "Injury"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Odds/games": {
       "get": {
         "tags": [
           "Odds"
         ],
+        "summary": "Odds for a game.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "id",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int64"
@@ -96,44 +2277,37 @@
         }
       }
     },
-    "/api/parlay-pit": {
+    "/api/Injury": {
       "get": {
         "tags": [
-          "ParlayPit"
+          "Injury"
         ],
-        "parameters": [
-          {
-            "name": "date",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "summary": "Current injury reports.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InjuryReportApiResponse"
+                  }
+                }
+              }
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
         }
       }
     },
-    "/api/payments/apple/verify": {
-      "post": {
+    "/api/Trending": {
+      "get": {
         "tags": [
-          "Payments"
+          "Trending"
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/payments/google/verify": {
-      "post": {
-        "tags": [
-          "Payments"
-        ],
+        "summary": "Trending bets.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "responses": {
           "200": {
             "description": "OK"
@@ -146,10 +2320,13 @@
         "tags": [
           "Players"
         ],
+        "summary": "Player props for a date.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "date",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -167,6 +2344,8 @@
         "tags": [
           "Players"
         ],
+        "summary": "Base game logs for a player.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "playerId",
@@ -180,6 +2359,7 @@
           {
             "name": "filter",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string",
               "default": "H2H"
@@ -188,6 +2368,7 @@
           {
             "name": "opponentTeamId",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -207,6 +2388,8 @@
         "tags": [
           "Players"
         ],
+        "summary": "Game-by-game chart series for a prop.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "playerId",
@@ -220,6 +2403,7 @@
           {
             "name": "propType",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -227,6 +2411,7 @@
           {
             "name": "filter",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string",
               "default": "L5"
@@ -235,6 +2420,7 @@
           {
             "name": "opponentTeamId",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -254,6 +2440,8 @@
         "tags": [
           "Players"
         ],
+        "summary": "Supporting-stat chart series.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "playerId",
@@ -267,6 +2455,7 @@
           {
             "name": "stat",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -274,6 +2463,7 @@
           {
             "name": "filter",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string",
               "default": "L5"
@@ -282,6 +2472,7 @@
           {
             "name": "opponentTeamId",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -301,6 +2492,8 @@
         "tags": [
           "Players"
         ],
+        "summary": "Shooting-zone breakdown for a player.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "playerId",
@@ -314,6 +2507,7 @@
           {
             "name": "filter",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string",
               "default": "L5"
@@ -322,6 +2516,7 @@
           {
             "name": "opponentTeamId",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -341,10 +2536,13 @@
         "tags": [
           "Players"
         ],
+        "summary": "Opponent defensive profile for a prop.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "teamId",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -353,6 +2551,7 @@
           {
             "name": "prop",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -360,53 +2559,10 @@
           {
             "name": "positionBucket",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string",
               "default": "ALL"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Props/games": {
-      "get": {
-        "tags": [
-          "Props"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Props/players": {
-      "get": {
-        "tags": [
-          "Props"
-        ],
-        "parameters": [
-          {
-            "name": "date",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
             }
           }
         ],
@@ -422,6 +2578,8 @@
         "tags": [
           "Stats"
         ],
+        "summary": "All teams.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "responses": {
           "200": {
             "description": "OK"
@@ -434,10 +2592,13 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Paged player search.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "search",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -445,6 +2606,7 @@
           {
             "name": "perPage",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -454,6 +2616,7 @@
           {
             "name": "page",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -473,10 +2636,13 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Paged game search.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "startDate",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -485,6 +2651,7 @@
           {
             "name": "endDate",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -493,6 +2660,7 @@
           {
             "name": "teamIds",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -500,6 +2668,7 @@
           {
             "name": "postseason",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "boolean",
               "default": false
@@ -508,6 +2677,7 @@
           {
             "name": "perPage",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -517,6 +2687,7 @@
           {
             "name": "page",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -536,10 +2707,13 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Paged box-score search.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "playerIds",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "array",
               "items": {
@@ -551,6 +2725,7 @@
           {
             "name": "gameIds",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "array",
               "items": {
@@ -562,6 +2737,7 @@
           {
             "name": "seasons",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "array",
               "items": {
@@ -573,6 +2749,7 @@
           {
             "name": "startDate",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -581,6 +2758,7 @@
           {
             "name": "endDate",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -589,6 +2767,7 @@
           {
             "name": "postseason",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "boolean",
               "default": false
@@ -597,6 +2776,7 @@
           {
             "name": "perPage",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -606,6 +2786,7 @@
           {
             "name": "page",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -625,10 +2806,13 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Season averages for players.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "season",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -637,6 +2821,7 @@
           {
             "name": "playerIds",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "array",
               "items": {
@@ -648,6 +2833,7 @@
           {
             "name": "perPage",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -667,10 +2853,13 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Defensive rank for a team and prop.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "teamId",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -679,6 +2868,7 @@
           {
             "name": "prop",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -686,6 +2876,7 @@
           {
             "name": "season",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -705,6 +2896,8 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Today's prop row for a player and prop.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "playerId",
@@ -718,6 +2911,7 @@
           {
             "name": "prop",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -735,6 +2929,8 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Diagnostic dump of opponent averages.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "responses": {
           "200": {
             "description": "OK"
@@ -747,6 +2943,8 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Status of the ingestion pollers.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "responses": {
           "200": {
             "description": "OK"
@@ -759,6 +2957,8 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Recompute defensive ranks.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "responses": {
           "200": {
             "description": "OK"
@@ -771,47 +2971,15 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Team trend rows for a date.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "date",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Stats/team-trends/refresh": {
-      "post": {
-        "tags": [
-          "Stats"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Stats/team/{teamId}/projected-lineup": {
-      "get": {
-        "tags": [
-          "Stats"
-        ],
-        "parameters": [
-          {
-            "name": "teamId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
             }
           }
         ],
@@ -827,10 +2995,13 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Filtered team matchup logs.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "teamId",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -839,6 +3010,7 @@
           {
             "name": "filterStat",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -846,6 +3018,7 @@
           {
             "name": "bracket",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -853,6 +3026,7 @@
           {
             "name": "limit",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -872,10 +3046,13 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Defense-versus-position table for a team.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "teamId",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -884,6 +3061,7 @@
           {
             "name": "season",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -893,6 +3071,7 @@
           {
             "name": "window",
             "in": "query",
+            "required": false,
             "schema": {
               "type": "string",
               "default": "Full"
@@ -911,10 +3090,13 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Play-type matchup between two teams.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "offTeamId",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -923,6 +3105,7 @@
           {
             "name": "defTeamId",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -931,6 +3114,7 @@
           {
             "name": "season",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -949,6 +3133,8 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Player matchup matrix versus a defense.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "playerId",
@@ -962,6 +3148,7 @@
           {
             "name": "defTeamId",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -970,6 +3157,7 @@
           {
             "name": "season",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -988,6 +3176,8 @@
         "tags": [
           "Stats"
         ],
+        "summary": "Player shooting-zone heatmap versus a defense.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "playerId",
@@ -1001,6 +3191,7 @@
           {
             "name": "defTeamId",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -1009,23 +3200,12 @@
           {
             "name": "season",
             "in": "query",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Trending": {
-      "get": {
-        "tags": [
-          "Trending"
         ],
         "responses": {
           "200": {
@@ -1039,6 +3219,8 @@
         "tags": [
           "Trends"
         ],
+        "summary": "Team matchup logs.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "teamId",
@@ -1054,23 +3236,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TeamMatchupLog"
-                  }
-                }
-              },
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TeamMatchupLog"
-                  }
-                }
-              },
-              "text/json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -1088,6 +3254,8 @@
         "tags": [
           "Trends"
         ],
+        "summary": "Basic team summary.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "teamId",
@@ -1111,6 +3279,8 @@
         "tags": [
           "Trends"
         ],
+        "summary": "Player season averages by category and type.",
+        "description": "Legacy NBA-era surface. Still routed, but the NBA vertical is detached: this endpoint resolves to a dormant placeholder service and returns an empty result set until the vertical is reattached.",
         "parameters": [
           {
             "name": "playerId",
@@ -1144,65 +3314,342 @@
           }
         }
       }
-    },
-    "/api/users/me/delete": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/webhooks/stripe": {
-      "post": {
-        "tags": [
-          "Webhook"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/webhooks/balldontlie": {
-      "post": {
-        "tags": [
-          "Webhook"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/webhooks/draftkings": {
-      "post": {
-        "tags": [
-          "Webhook"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
     }
   },
   "components": {
     "schemas": {
       "Sport": {
         "enum": [
-          1,
-          2
+          "Nba",
+          "Mlb"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string",
+        "description": "Sport discriminator carried by multi-sport tables."
+      },
+      "MarketScope": {
+        "enum": [
+          "FullGame",
+          "FirstFive"
+        ],
+        "type": "string",
+        "description": "Full game, or the first five innings (F5) market."
+      },
+      "SlateWindow": {
+        "enum": [
+          "Full",
+          "Early",
+          "Night"
+        ],
+        "type": "string"
+      },
+      "MlbSplitsArsenalWindow": {
+        "enum": [
+          "L5",
+          "L10",
+          "L20",
+          "Season",
+          "LastSeason"
+        ],
+        "type": "string"
+      },
+      "AppTheme": {
+        "enum": [
+          "Dark",
+          "Light",
+          "System"
+        ],
+        "type": "string"
+      },
+      "ParlayType": {
+        "enum": [
+          "Standard",
+          "Sgp"
+        ],
+        "type": "string"
+      },
+      "ResolveUnresolvedPropRequest": {
+        "type": "object",
+        "properties": {
+          "bdlPlayerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mlbamId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BackfillOrchestrateRequest": {
+        "type": "object",
+        "properties": {
+          "season": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "seasons": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "stages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "propMarkets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "macroRegions": {
+            "type": "string",
+            "nullable": true
+          },
+          "timings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BacktestRunRequest": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RunDailyRequest": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ParlayLegRequest": {
+        "type": "object",
+        "properties": {
+          "propRowId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "marketLineId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "direction": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ParlayEvaluateRequest": {
+        "type": "object",
+        "properties": {
+          "legs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParlayLegRequest"
+            }
+          },
+          "parlayType": {
+            "$ref": "#/components/schemas/ParlayType"
+          },
+          "bookmakerKey": {
+            "type": "string"
+          },
+          "stake": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserPreferencesDto": {
+        "type": "object",
+        "properties": {
+          "defaultBaseUnit": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultMarketScope": {
+            "$ref": "#/components/schemas/MarketScope"
+          },
+          "theme": {
+            "$ref": "#/components/schemas/AppTheme"
+          },
+          "defaultSlateView": {
+            "type": "string",
+            "nullable": true
+          },
+          "avatarColorSeed": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "lastTab": {
+            "type": "string",
+            "nullable": true
+          },
+          "paneWidthsJson": {
+            "type": "string",
+            "nullable": true
+          },
+          "playerDirectoryFilterJson": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserProfileResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "avatarColorHashSeed": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "entitlementTier": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserDataExportResponse": {
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PortalSessionResponse": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InjuryReportApiResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sport": {
+            "$ref": "#/components/schemas/Sport"
+          },
+          "playerName": {
+            "type": "string",
+            "nullable": false
+          },
+          "team": {
+            "type": "string",
+            "nullable": false
+          },
+          "position": {
+            "type": "string",
+            "nullable": false
+          },
+          "injuryType": {
+            "type": "string",
+            "nullable": false
+          },
+          "status": {
+            "type": "string",
+            "nullable": false
+          },
+          "estimatedReturn": {
+            "type": "string",
+            "nullable": false
+          },
+          "summary": {
+            "type": "string",
+            "nullable": false
+          },
+          "source": {
+            "type": "string",
+            "nullable": false
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": false
+          },
+          "firstSeenAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": false
+          },
+          "gameDisplay": {
+            "type": "string",
+            "nullable": false
+          },
+          "isLocked": {
+            "type": "boolean",
+            "nullable": false
+          }
+        },
+        "additionalProperties": false
       },
       "TeamMatchupLog": {
         "type": "object",
@@ -1220,7 +3667,8 @@
           },
           "gameDate": {
             "type": "string",
-            "format": "date"
+            "format": "date",
+            "nullable": false
           },
           "season": {
             "type": "integer",
@@ -1235,7 +3683,8 @@
             "format": "int32"
           },
           "isHome": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": false
           },
           "pointsInPaint": {
             "type": "integer",
@@ -1294,7 +3743,797 @@
           },
           "lastUpdated": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "WindowFractionDto": {
+        "type": "object",
+        "properties": {
+          "window": {
+            "type": "string"
+          },
+          "display": {
+            "type": "string"
+          },
+          "hits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbPlayerDirectoryRow": {
+        "type": "object",
+        "properties": {
+          "propRowId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playerName": {
+            "type": "string"
+          },
+          "headshotUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string"
+          },
+          "playerTeamAbbr": {
+            "type": "string"
+          },
+          "opposingPitcherName": {
+            "type": "string",
+            "nullable": true
+          },
+          "opposingPitcherHand": {
+            "type": "string",
+            "nullable": true
+          },
+          "propType": {
+            "type": "string"
+          },
+          "line": {
+            "type": "number",
+            "format": "double"
+          },
+          "overPrice": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "underPrice": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "windowFractions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WindowFractionDto"
+            }
+          },
+          "hasAltLines": {
+            "type": "boolean",
+            "nullable": false
+          },
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "grade": {
+            "type": "string",
+            "nullable": true
+          },
+          "gradeSide": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "QualifyingTrendDto": {
+        "type": "object",
+        "properties": {
+          "splitKey": {
+            "type": "string"
+          },
+          "window": {
+            "type": "string"
+          },
+          "hits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pct": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrendSignalCardDto": {
+        "type": "object",
+        "properties": {
+          "trendSignalId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "slateDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": false
+          },
+          "gameTimeUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": false
+          },
+          "playerId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "playerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "propType": {
+            "type": "string",
+            "nullable": true
+          },
+          "propPoint": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "marketScopeLabel": {
+            "type": "string"
+          },
+          "homeTeamAbbr": {
+            "type": "string"
+          },
+          "visitorTeamAbbr": {
+            "type": "string"
+          },
+          "venueName": {
+            "type": "string",
+            "nullable": true
+          },
+          "direction": {
+            "type": "string"
+          },
+          "bestOdds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "edgePct": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "edgeGrade": {
+            "type": "string",
+            "nullable": true
+          },
+          "propRowId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "marketLineId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "qualifyingTrends": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QualifyingTrendDto"
+            }
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "handedness": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbAltLineRow": {
+        "type": "object",
+        "properties": {
+          "propRowId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "line": {
+            "type": "number",
+            "format": "double"
+          },
+          "overPrice": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "underPrice": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "overBookmakerKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "underBookmakerKey": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbModelCells": {
+        "type": "object",
+        "properties": {
+          "edgePct": {
+            "type": "number",
+            "format": "double"
+          },
+          "ev": {
+            "type": "number",
+            "format": "double"
+          },
+          "grade": {
+            "type": "string"
+          },
+          "driverTag": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbBlockMarkets": {
+        "type": "object",
+        "properties": {
+          "awayMl": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "homeMl": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "awayRlPoint": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "awayRlPrice": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "homeRlPoint": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "homeRlPrice": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "total": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "overPrice": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "underPrice": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbGameDirectoryBlock": {
+        "type": "object",
+        "properties": {
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "awayTeamId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "homeTeamId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "awayTeamAbbr": {
+            "type": "string"
+          },
+          "homeTeamAbbr": {
+            "type": "string"
+          },
+          "startTimeUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "venueName": {
+            "type": "string",
+            "nullable": true
+          },
+          "scope": {
+            "$ref": "#/components/schemas/MarketScope"
+          },
+          "markets": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbBlockMarkets"
+              }
+            ],
+            "nullable": true
+          },
+          "awayModel": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbModelCells"
+              }
+            ],
+            "nullable": true
+          },
+          "homeModel": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbModelCells"
+              }
+            ],
+            "nullable": true
+          },
+          "overModel": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbModelCells"
+              }
+            ],
+            "nullable": true
+          },
+          "awayHitRatePattern": {
+            "type": "string",
+            "nullable": true
+          },
+          "homeHitRatePattern": {
+            "type": "string",
+            "nullable": true
+          },
+          "weatherSummary": {
+            "type": "string",
+            "nullable": true
+          },
+          "parkFactor": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbPitcherHudRow": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "hand": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbLineupPlatoonRow": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "opposingPitcherHand": {
+            "type": "string",
+            "nullable": true
+          },
+          "splitType": {
+            "type": "string",
+            "nullable": true
+          },
+          "lineupWoba": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "lineupIso": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "wobaRank": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "wobaPercentile": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "isoRank": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isoPercentile": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbReliefEntry": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pitchesLast72h": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "appearancesLast3d": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StarterDecayRow": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "playerName": {
+            "type": "string"
+          },
+          "pitchCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pitchesRemaining": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "decayPct": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbGameHudTier": {
+        "type": "object",
+        "properties": {
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "type": "string"
+          },
+          "startTimeUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "venueName": {
+            "type": "string",
+            "nullable": true
+          },
+          "parkFactor": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "weatherSummary": {
+            "type": "string",
+            "nullable": true
+          },
+          "homePitcher": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbPitcherHudRow"
+              }
+            ],
+            "nullable": true
+          },
+          "visitorPitcher": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbPitcherHudRow"
+              }
+            ],
+            "nullable": true
+          },
+          "homeLineupPlatoon": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbLineupPlatoonRow"
+              }
+            ],
+            "nullable": true
+          },
+          "visitorLineupPlatoon": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbLineupPlatoonRow"
+              }
+            ],
+            "nullable": true
+          },
+          "homeReliefTimeline": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MlbReliefEntry"
+            },
+            "nullable": true
+          },
+          "visitorReliefTimeline": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MlbReliefEntry"
+            },
+            "nullable": true
+          },
+          "homeStarterDecay": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StarterDecayRow"
+              }
+            ],
+            "nullable": true
+          },
+          "visitorStarterDecay": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StarterDecayRow"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbLedgerEntry": {
+        "type": "object",
+        "properties": {
+          "wins": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pct": {
+            "type": "number",
+            "format": "double"
+          },
+          "last10Pattern": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbTeamLedgerRow": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "suLedger": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbLedgerEntry"
+              }
+            ],
+            "nullable": true
+          },
+          "rlLedger": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbLedgerEntry"
+              }
+            ],
+            "nullable": true
+          },
+          "f5MlLedger": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbLedgerEntry"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbBatterSplitRow": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "battingOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "position": {
+            "type": "string"
+          },
+          "splitType": {
+            "type": "string",
+            "nullable": true
+          },
+          "woba": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "iso": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "xWoba": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pa": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbBullpenEntry": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teamId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pitchesLast72h": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "appearancesLast3d": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbGameLedgerTier": {
+        "type": "object",
+        "properties": {
+          "homeLedger": {
+            "$ref": "#/components/schemas/MlbTeamLedgerRow"
+          },
+          "visitorLedger": {
+            "$ref": "#/components/schemas/MlbTeamLedgerRow"
+          },
+          "homeBattingOrder": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MlbBatterSplitRow"
+            }
+          },
+          "visitorBattingOrder": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MlbBatterSplitRow"
+            }
+          },
+          "homeBullpen": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MlbBullpenEntry"
+            },
+            "nullable": true
+          },
+          "visitorBullpen": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MlbBullpenEntry"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MlbGameDetailResponse": {
+        "type": "object",
+        "properties": {
+          "tier1": {
+            "$ref": "#/components/schemas/MlbGameHudTier"
+          },
+          "tier2": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MlbGameLedgerTier"
+              }
+            ],
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1311,48 +4550,97 @@
   },
   "security": [
     {
-      "Bearer": [ ]
+      "Bearer": []
     }
   ],
   "tags": [
     {
-      "name": "Admin"
+      "name": "Admin",
+      "description": "Operator-only ingestion, backfill, model-fit and diagnostic endpoints."
     },
     {
-      "name": "Games"
+      "name": "Inference",
+      "description": "Daily inference runs, grading and workbook export."
     },
     {
-      "name": "Injury"
+      "name": "MlbGames",
+      "description": "MLB game directory and two-tier game detail."
     },
     {
-      "name": "Odds"
+      "name": "MlbPlayers",
+      "description": "MLB player directory, alternate lines, detail and splits."
     },
     {
-      "name": "ParlayPit"
+      "name": "MlbHome",
+      "description": "MLB landing-screen surfaces."
     },
     {
-      "name": "Payments"
+      "name": "MlbTrend",
+      "description": "MLB trend-signal cards."
     },
     {
-      "name": "Players"
+      "name": "MlbTeamDetail",
+      "description": "MLB team detail and split ranks."
     },
     {
-      "name": "Props"
+      "name": "Terminal",
+      "description": "MLB terminal HUD, slate ticker, heatmap and leaderboard."
     },
     {
-      "name": "Stats"
+      "name": "MlbParlay",
+      "description": "Correlation-aware parlay pricing and leg suggestions."
     },
     {
-      "name": "Trending"
+      "name": "ParlayPit",
+      "description": "Parlay-pit board."
     },
     {
-      "name": "Trends"
+      "name": "Engine",
+      "description": "Engine cache control."
     },
     {
-      "name": "Users"
+      "name": "Profile",
+      "description": "Authenticated user profile and preferences."
     },
     {
-      "name": "Webhook"
+      "name": "Users",
+      "description": "Account erasure and data export."
+    },
+    {
+      "name": "Payments",
+      "description": "Stripe, Apple and Google purchase verification."
+    },
+    {
+      "name": "Webhook",
+      "description": "Signature-verified vendor and payment callbacks."
+    },
+    {
+      "name": "Games",
+      "description": "Dormant NBA-era surface."
+    },
+    {
+      "name": "Odds",
+      "description": "Dormant NBA-era surface."
+    },
+    {
+      "name": "Injury",
+      "description": "Dormant NBA-era surface."
+    },
+    {
+      "name": "Trending",
+      "description": "Dormant NBA-era surface."
+    },
+    {
+      "name": "Players",
+      "description": "Dormant NBA-era surface."
+    },
+    {
+      "name": "Stats",
+      "description": "Dormant NBA-era surface."
+    },
+    {
+      "name": "Trends",
+      "description": "Dormant NBA-era surface."
     }
   ]
 }
